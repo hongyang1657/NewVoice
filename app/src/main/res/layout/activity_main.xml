@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/wakeup"
+        android:text="唤醒角度"
+        android:layout_alignParentTop="true"
+        android:maxLines="3"
+        android:ellipsize="end" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ASR  ASR  ASR"
+        android:id="@+id/asr"
+        android:layout_below="@id/wakeup"
+        android:maxLines="3"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ASR  ASR  ASR"
+        android:id="@+id/xunfei_asr"
+        android:layout_below="@id/asr"
+        android:maxLines="3"
+        android:ellipsize="end"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_resp"
+        android:layout_below="@id/xunfei_asr"
+        android:maxLines="10"
+        android:ellipsize="end"/>
+
+
+    <LinearLayout
+        android:weightSum="3"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="#00000000"
+            android:id="@+id/btn_wake"
+            android:onClick="onClick"
+            android:layout_centerInParent="true"
+            android:text="开启唤醒" />
+        <Button
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/btn_close_wake"
+            android:onClick="onClick"
+            android:background="#00000000"
+            android:layout_below="@id/btn_wake"
+            android:layout_centerInParent="true"
+            android:text="关闭唤醒" />
+        <Button
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/btn_speak"
+            android:onClick="onClick"
+            android:background="#00000000"
+            android:layout_below="@id/btn_wake"
+            android:layout_centerInParent="true"
+            android:text="点击说话" />
+    </LinearLayout>
+
+</RelativeLayout>

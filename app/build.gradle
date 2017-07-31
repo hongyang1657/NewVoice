@@ -1,0 +1,80 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.3"
+    defaultConfig {
+        applicationId "fitme.ai"
+        minSdkVersion 19
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    signingConfigs {
+        release {
+            storeFile file(MYAPP_RELEASE_STORE_FILE)
+            storePassword MYAPP_RELEASE_STORE_PASSWORD
+            keyAlias MYAPP_RELEASE_KEY_ALIAS
+            keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            //v2SigningEnabled false
+        }
+    }
+
+    buildTypes {
+        release {
+            //Zip代码压缩优化
+            zipAlignEnabled true
+            //移除无用资源
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
+//            buildConfigField "String", "CODEPUSH_KEY", '"WpMch_P_jWPlzKKQISmHsx2Cm1PIVJERDwNR-"'
+        }
+        debug{
+            signingConfig signingConfigs.release
+            /*//Zip代码压缩优化
+            zipAlignEnabled true
+            //移除无用资源
+            shrinkResources true*/
+//            buildConfigField "String", "CODEPUSH_KEY", '"rDok_P8LQe3dI3rWWASe_hLcQHhiVJERDwNR-"'
+        }
+    }
+}
+
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testCompile 'junit:junit:4.12'
+    compile 'com.google.code.gson:gson:2.8.0'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
+    compile 'com.squareup.okio:okio:1.13.0'
+    compile 'com.squareup.okhttp3:okhttp:3.8.0'
+    compile 'io.reactivex:rxjava:1.1.9'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile files('libs/Sunflower.jar')
+    compile files('libs/Msc.jar')
+    compile files('libs/libLet.jar')
+    compile files('libs/AMap_Location_V2.9.0_20160906.jar')
+    compile files('libs/AMap_Search_V3.6.1_20161222.jar')
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/bt_to_next"
+        android:text="点击进入主界面"
+        android:onClick="launchActivityClick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/bt_start_ap"
+        android:onClick="launchActivityClick"
+        android:text="开启ap热点,接收UDP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
