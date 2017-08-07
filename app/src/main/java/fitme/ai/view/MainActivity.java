@@ -396,7 +396,8 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
 
             wordsToVoice.startSynthesizer("欢迎回家，已为你打开回家模式",mTtsListener);
 
-        }else if (scene(sendMsg,"我要出门")||scene(sendMsg,"准备出门")){
+        }
+        /*else if (scene(sendMsg,"我要出门")||scene(sendMsg,"准备出门")){
             L.i("2");
             new Thread(){
                 @Override
@@ -518,7 +519,7 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
             blControl.commandRedCodeDevice(BLControlConstants.MAIN_LIGHT_OPEN, BLControlConstants.RM_PRO_DID);   //窗帘
         }else if (scene(sendMsg,"客厅")&&scene(sendMsg,"灯")&&scene(sendMsg,"关")){
             blControl.commandRedCodeDevice(BLControlConstants.MAIN_LIGHT_CLOSE, BLControlConstants.RM_PRO_DID);   //窗帘
-        }
+        }*/
 
         else {
             //发送消息请求
