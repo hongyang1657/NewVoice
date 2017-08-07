@@ -14,10 +14,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiManager {
     //fitme的api访问基础地址
     //外网
-    private static final String FITMEURL="http://app.fitme.ai:7001";
+    //private static final String FITMEURL="http://app.fitme.ai:7001";
 
     //内网,mingNan
-    //private static final String FITMEURL = "http://172.16.11.27:7001";
+    private static final String FITMEURL = "http://172.16.11.27:7001";
 
     //青山湖
     //private static final String FITMEURL = "http://192.168.31.218:7001";
