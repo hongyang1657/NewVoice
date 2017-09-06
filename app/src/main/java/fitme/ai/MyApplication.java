@@ -16,7 +16,7 @@ import fitme.ai.utils.UnCeHandler;
 
 /**
  * 语音技术由科大讯飞提供
- * Created by Lixiaojie on 2016/10/27.
+ *
  */
 
 public class MyApplication extends Application {
@@ -35,22 +35,14 @@ public class MyApplication extends Application {
     public static ArrayList<BLDNADevice> mDevList = new ArrayList<BLDNADevice>();
     public static BLUserInfoUnits mBLUserInfoUnits;
 
-    /*static {
-        try {
-            System.loadLibrary("saiAPIs");
-            Log.d(TAG, "static initializer: success!!!");
-        } catch (UnsatisfiedLinkError e) {
-            Log.e("My Activity", "Native code library failed to load.\n" + e);
-            System.exit(1);
-        }
-    }*/
+
 
     @Override
     public void onCreate() {
         super.onCreate();
         L.i("初始化讯飞");
-        //gqgz的账号  591587b6
-        SpeechUtility.createUtility(this, SpeechConstant.APPID +"=591587b6");
+        //gqgz的账号  59ae515e
+        SpeechUtility.createUtility(this, SpeechConstant.APPID +"=59ae515e");
         //fitme APP的账号
         //SpeechUtility.createUtility(this, SpeechConstant.APPID +"=57edd2db");
         //初始化博联sdk
@@ -61,7 +53,6 @@ public class MyApplication extends Application {
         //设置该CrashHandler为程序的默认处理器
         /*UnCeHandler catchExcep = new UnCeHandler(this);
         Thread.setDefaultUncaughtExceptionHandler(catchExcep);*/
-
 
     }
 

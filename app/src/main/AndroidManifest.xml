@@ -59,7 +59,7 @@
             android:value="39cc39eb05682d3f4a31546665743be5" />
 
         <activity android:name="fitme.ai.view.MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

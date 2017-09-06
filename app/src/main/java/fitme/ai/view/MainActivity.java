@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,7 +84,8 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
 
     private TextView tvXunfeiASR;
     private TextView tvResp;
-    private Button btn_speak;
+    private Button btn_speak,btn_send;
+    private EditText etInput;
 
     private MyApplication app;
 
@@ -127,6 +129,7 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
         tvResp = (TextView) findViewById(R.id.tv_resp);
         tvXunfeiASR = (TextView) findViewById(R.id.xunfei_asr);
         btn_speak = (Button) findViewById(R.id.btn_speak);
+        etInput = (EditText) findViewById(R.id.et_input);
 
         //初始化短音效
         soundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
@@ -188,11 +191,15 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
         switch (id) {
             case R.id.btn_wake:
                 iflytekWakeUp.startWakeuper();
-                blControl.dnaControlSet("mp1","1","pwr2");
+                //blControl.dnaControlSet("mp1","1","pwr2");
                 break;
             case R.id.btn_close_wake:
                 iflytekWakeUp.stopWakeuper();
-                blControl.dnaControlSet("mp1","0","pwr2");
+                //blControl.dnaControlSet("mp1","0","pwr2");
+                break;
+            case R.id.btn_send:
+                String text = etInput.getText().toString().trim();
+                manageVoiceInfo(text);
                 break;
         }
     }
@@ -369,12 +376,20 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
     @Override
     public void appendResult(CharSequence sequence) {
         L.i("讯飞语音识别回调appendResult----------------------"+sequence.toString());
+        String sendMsg = sequence.toString();
+        manageVoiceInfo(sendMsg);
+    }
+
+
+    //处理语音信号
+    private void manageVoiceInfo(String sendMsg){
+        tvXunfeiASR.setText(sendMsg);
         if (!iflytekWakeUp.isIvwListening()){
             iflytekWakeUp.startWakeuper();
         }
         //playingmusic(MusicPlayerService.RECOVER_MUSIC_VOLUME,"");
 
-        String sendMsg = sequence.toString();
+
         if (scene(sendMsg,"马上到家")||scene(sendMsg,"快到家了")||scene(sendMsg,"我要到家了")){
             L.i("1");
             new Thread(){
@@ -528,9 +543,8 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
                         ,String.valueOf(app.getLongitude()),String.valueOf(app.getLatitude()),"device_text",sendMsg,"13145");
             }
         }
-
-
     }
+
 
     //正则判断场景
     private boolean scene(String sendMsg,String regEx) {
@@ -660,21 +674,7 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
 
 
                 handler.sendEmptyMessage(2);
-                //关闭设备扫描
-                /*new Thread(){
-                    @Override
-                    public void run() {
-                        super.run();
-                        try {
-                            sleep(15000);
-                            //BLLet.Controller.stopProbe();
-                            L.i("停止扫描");
-                            handler.sendEmptyMessage(2);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }.start();*/
+
 
             }
         });
@@ -1040,7 +1040,7 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
         mapDevices.put("user_group","客厅");
         devices.add(mapDevices);
 
-        map.put("user_id", "105");
+        map.put("user_id", "1067");  //105
         map.put("devices", devices);
 
         Gson gson = new Gson();

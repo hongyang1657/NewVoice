@@ -98,7 +98,7 @@ public class IflytekWakeUp {
      * @return 返回文件位置
      */
     private String getResource() {
-        final String resPath = ResourceUtil.generateResourcePath(mContext, ResourceUtil.RESOURCE_TYPE.assets, "ivw/" + "591587b6" + ".jet");
+        final String resPath = ResourceUtil.generateResourcePath(mContext, ResourceUtil.RESOURCE_TYPE.assets, "ivw/" + "59ae515e" + ".jet");
         return resPath;
     }
 
