@@ -62,8 +62,10 @@ import fitme.ai.MyApplication;
 import fitme.ai.R;
 import fitme.ai.bean.MessageGet;
 import fitme.ai.bean.Music;
+import fitme.ai.bean.YeelightDeviceBean;
 import fitme.ai.model.BLControl;
 import fitme.ai.model.BLControlConstants;
+import fitme.ai.model.YeelightControl;
 import fitme.ai.service.MusicPlayerService;
 import fitme.ai.setting.api.ApiManager;
 import fitme.ai.utils.IflytekWakeUp;
@@ -75,12 +77,13 @@ import fitme.ai.utils.SignAndEncrypt;
 import fitme.ai.utils.VoiceToWords;
 import fitme.ai.utils.WordsToVoice;
 import fitme.ai.view.impl.IGetVoiceToWord;
+import fitme.ai.view.impl.IGetYeelight;
 import okhttp3.ResponseBody;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends Activity implements View.OnClickListener, IGetVoiceToWord{
+public class MainActivity extends Activity implements View.OnClickListener, IGetVoiceToWord,IGetYeelight {
 
     private TextView tvXunfeiASR;
     private TextView tvResp;
@@ -104,6 +107,7 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
 
     //博联控制类
     private BLControl blControl;
+    private static final int YEELIGHT_NULL = -1;
 
 
     private Handler handler = new Handler(){
@@ -153,6 +157,8 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
 
         //初始化博联
         initBoardLink();
+        //初始化yeelight
+        initYeelight();
         TestSpeak();
 
         if (NetworkStateUtil.isNetworkAvailable(this)){
@@ -408,9 +414,7 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
                     }
                 }
             }.start();
-
             wordsToVoice.startSynthesizer("欢迎回家，已为你打开回家模式",mTtsListener);
-
         }
         /*else if (scene(sendMsg,"我要出门")||scene(sendMsg,"准备出门")){
             L.i("2");
@@ -535,6 +539,35 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
         }else if (scene(sendMsg,"客厅")&&scene(sendMsg,"灯")&&scene(sendMsg,"关")){
             blControl.commandRedCodeDevice(BLControlConstants.MAIN_LIGHT_CLOSE, BLControlConstants.RM_PRO_DID);   //窗帘
         }*/
+
+        else if (scene(sendMsg,"台灯")&&scene(sendMsg,"打开")){
+            controlYeelight("0x0000000002fa4371",true,YEELIGHT_NULL,YEELIGHT_NULL,YEELIGHT_NULL);
+        }else if (scene(sendMsg,"台灯")&&scene(sendMsg,"关")){
+            controlYeelight("0x0000000002fa4371",false,YEELIGHT_NULL,YEELIGHT_NULL,YEELIGHT_NULL);
+        }else if (scene(sendMsg,"台灯")&&scene(sendMsg,"最亮")){
+            controlYeelight("0x0000000002fa4371",false,100,YEELIGHT_NULL,YEELIGHT_NULL);
+        }else if (scene(sendMsg,"台灯")&&scene(sendMsg,"最暗")){
+            controlYeelight("0x0000000002fa4371",false,1,YEELIGHT_NULL,YEELIGHT_NULL);
+        }else if (scene(sendMsg,"台灯")&&scene(sendMsg,"亮")){
+            //这里需要判断
+            controlYeelight("0x0000000002fa4371",false,YEELIGHT_NULL,YEELIGHT_NULL,YEELIGHT_NULL);
+        }else if (scene(sendMsg,"台灯")&&scene(sendMsg,"暗")){
+            //需要判断，当前亮度是多少
+            controlYeelight("0x0000000002fa4371",false,YEELIGHT_NULL,YEELIGHT_NULL,YEELIGHT_NULL);
+        }else if (scene(sendMsg,"灯带")&&scene(sendMsg,"打开")){
+            controlYeelight("0x00000000031a9262",true,YEELIGHT_NULL,YEELIGHT_NULL,YEELIGHT_NULL);
+        }else if (scene(sendMsg,"灯带")&&scene(sendMsg,"关")){
+            controlYeelight("0x00000000031a9262",false,YEELIGHT_NULL,YEELIGHT_NULL,YEELIGHT_NULL);
+        }else if (scene(sendMsg,"灯带")&&scene(sendMsg,"红色")){
+            controlYeelight("0x00000000031a9262",false,YEELIGHT_NULL,1,YEELIGHT_NULL);
+        }else if (scene(sendMsg,"灯带")&&scene(sendMsg,"蓝色")){
+            controlYeelight("0x00000000031a9262",false,YEELIGHT_NULL,229,YEELIGHT_NULL);
+        }else if (scene(sendMsg,"灯带")&&scene(sendMsg,"绿色")){
+            controlYeelight("0x00000000031a9262",false,YEELIGHT_NULL,97,YEELIGHT_NULL);
+        }else if (scene(sendMsg,"灯带")&&scene(sendMsg,"黄色")){
+            controlYeelight("0x00000000031a9262",false,YEELIGHT_NULL,54,YEELIGHT_NULL);
+        }
+
 
         else {
             //发送消息请求
@@ -805,18 +838,18 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
 
                                     int devicesLength = messageGet.getMessages()[0].getMessage_body().getTask_result_body().getDevices().size();
                                     for (int i=0;i<devicesLength;i++){
-                                        int deviceType = messageGet.getMessages()[0].getMessage_body().getTask_result_body().getDevices().get(i).getDevice_type();
-                                        if (20045==deviceType){  //杜亚窗帘
+                                        String deviceType = messageGet.getMessages()[0].getMessage_body().getTask_result_body().getDevices().get(i).getDevice_type();
+                                        if ("20045".equals(deviceType)){  //杜亚窗帘
                                             L.logE("杜亚窗帘");
                                             blControl.dnaControlSet("curtain",messageGet.getMessages()[0].getMessage_body().getTask_result_body().getDevices().get(i).getCommand_code(),"curtain_work");
                                             //blControl.curtainControl(Integer.parseInt(messageGet.getMessages()[0].getMessage_body().getTask_result_body().getCommand_code()));
-                                        }else if (10026==deviceType || 10039==deviceType){     //RM红外遥控
+                                        }else if ("10026".equals(deviceType) || "10039".equals(deviceType)){     //RM红外遥控
                                             L.logE("RM红外遥控");
                                             blControl.commandRedCodeDevice(messageGet.getMessages()[0].getMessage_body().getTask_result_body().getDevices().get(i).getCommand_code(),
                                                     messageGet.getMessages()[0].getMessage_body().getTask_result_body().getDevices().get(i).getDid());
-                                        }else if (30014==deviceType){     //SP系列wifi开关
+                                        }else if ("30014".equals(deviceType)){     //SP系列wifi开关
                                             blControl.dnaControlSet("sp","1","val");
-                                        }else if (20149==deviceType){        //四位排插
+                                        }else if ("20149".equals(deviceType)){        //四位排插
 
                                         }
                                     }
@@ -1010,6 +1043,52 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
     };
 
 
+    //初始化yeelight
+    private YeelightControl yeelightControl;
+    private void initYeelight(){
+        app.initYeelightDeviceList();
+        yeelightControl = YeelightControl.getInstance(app,this);    //初始化Yeelight,搜索设备
+        yeelightControl.searchDevice();
+    }
+
+    //yeelight设备回调
+    @Override
+    public void getDevices(List<HashMap<String, String>> devices) {
+        L.i("yeelightBean所有设备:"+new Gson().toJson(devices));
+        for (int i=0;i<devices.size();i++){
+            Gson gson = new Gson();
+            YeelightDeviceBean yeelightDeviceBean = gson.fromJson(new Gson().toJson(devices.get(i)), YeelightDeviceBean.class);     //这里可能要改动
+            L.i("yeelightBean每个设备:"+new Gson().toJson(yeelightDeviceBean));
+
+            app.setYeelightDeviceBean(yeelightDeviceBean);
+        }
+    }
+
+    @Override
+    public void getResponse(String response) {
+        L.i("yeelight设备回复："+response);
+    }
+
+
+    /*
+    *
+    *  亮度：0~100；
+    *  色温：0~4800
+    *  颜色：0~360
+    * */
+    private void controlYeelight(String did,boolean on,int bright,int color,int CT){
+        for (int i=0;i<app.getYeelightDeviceBeanList().size();i++){
+            if (app.getYeelightDeviceBeanList().get(i).getId().trim().equals(did)){  //灯带
+                String info = app.getYeelightDeviceBeanList().get(i).getLocation().split("//")[1];
+                String ip = info.split(":")[0];
+                int port = Integer.parseInt(info.split(":")[1]);
+                L.i("ip:"+ip+"---port:"+port);
+                yeelightControl.connectAndControl(ip,port,on,bright,color,CT);
+            }
+        }
+    }
+
+
     //绑定设备
     private void bindDevice(){
         String mac = Mac.getMac();
@@ -1018,7 +1097,7 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
         mac = "ac:83:f3:3f:7f:ae";
         String timeStamp = SignAndEncrypt.getTimeStamp();
         LinkedHashMap<String, Object> params = new LinkedHashMap<>();
-        params.put("method", "account/device_bind/create");
+        params.put("method", "account/device/create");
         params.put("api_key", ApiManager.api_key);
         params.put("timestamp", timeStamp);
 
@@ -1040,7 +1119,7 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
         mapDevices.put("user_group","客厅");
         devices.add(mapDevices);
 
-        map.put("user_id", "1067");  //105
+        map.put("user_id", "1067");  //1067
         map.put("devices", devices);
 
         Gson gson = new Gson();

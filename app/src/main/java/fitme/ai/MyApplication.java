@@ -6,9 +6,11 @@ import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cn.com.broadlink.sdk.BLLet;
 import cn.com.broadlink.sdk.data.controller.BLDNADevice;
+import fitme.ai.bean.YeelightDeviceBean;
 import fitme.ai.utils.BLUserInfoUnits;
 import fitme.ai.utils.L;
 import fitme.ai.utils.Location;
@@ -54,6 +56,20 @@ public class MyApplication extends Application {
         /*UnCeHandler catchExcep = new UnCeHandler(this);
         Thread.setDefaultUncaughtExceptionHandler(catchExcep);*/
 
+    }
+
+    private List<YeelightDeviceBean> yeelightDeviceBeanList;
+
+    public void initYeelightDeviceList(){
+        yeelightDeviceBeanList = new ArrayList<>();
+    }
+
+    public void setYeelightDeviceBean(YeelightDeviceBean yeelightDeviceBean){
+        yeelightDeviceBeanList.add(yeelightDeviceBean);
+    }
+
+    public List<YeelightDeviceBean> getYeelightDeviceBeanList(){
+        return yeelightDeviceBeanList;
     }
 
     public Location getLocation() {

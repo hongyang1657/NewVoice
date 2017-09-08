@@ -31,7 +31,7 @@ public interface ApiService {
                                            @Body Map<String, Object> httpBody);
 
     //设备绑定,绑定智能音箱
-    @POST("account/device_bind/create")
+    @POST("account/device/create")
     Observable<ResponseBody> deviceBind(@Query("api_key") String apiKey,
                                         @Query("timestamp") String timestamp,
                                         @Query("sign") String sign,
