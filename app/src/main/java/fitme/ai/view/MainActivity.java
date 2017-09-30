@@ -101,6 +101,7 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
     private SoundPool soundPool;
     private int soundid;
 
+    //音量控制
     private AudioManager mAudioManager;
     private int maxVolume;
     private int currentVolume;
@@ -116,7 +117,7 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
             super.handleMessage(msg);
             switch (msg.what){
                 case 1:
-                    blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_5, BLControlConstants.RM_PRO_DID);
+                    blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_3, BLControlConstants.RM_PRO_DID);
                     break;
                 case 2:
                     blControl = new BLControl(blDNADevicesMap);
@@ -161,11 +162,7 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
         initYeelight();
         TestSpeak();
 
-        if (NetworkStateUtil.isNetworkAvailable(this)){
-            wordsToVoice.startSynthesizer("欢迎使用小秘智能语音助理",mTtsListener);
-        }else {
-            wordsToVoice.startSynthesizer("哎呀，小秘没有连接上网络哦",mTtsListener);
-        }
+
 
         //绑定设备
         bindDevice();
@@ -243,6 +240,11 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
     //初始化android设备各项功能
     boolean isWifiClose = true;
     private void initAndroidFunctionState(){
+        if (NetworkStateUtil.isNetworkAvailable(this)){
+            wordsToVoice.startSynthesizer("欢迎使用小秘智能语音助理",mTtsListener);
+        }else {
+            wordsToVoice.startSynthesizer("哎呀，小秘没有连接上网络哦",mTtsListener);
+        }
         //判断网络状态
         if (!NetworkStateUtil.isNetworkAvailable(this)){
             L.i("当前没网络");
@@ -405,9 +407,9 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
                     try {
                         blControl.commandRedCodeDevice(BLControlConstants.MAIN_LIGHT_OPEN, BLControlConstants.RM_PRO_DID);   //开灯
                         sleep(1000);
-                        blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_7, BLControlConstants.RM_PRO_DID);   //窗帘
+                        blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_2, BLControlConstants.RM_PRO_DID);   //窗帘
                         sleep(1000);
-                        blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_5, BLControlConstants.RM_PRO_DID);   //车库门
+                        blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_3, BLControlConstants.RM_PRO_DID);   //车库门
                         handler.sendEmptyMessageDelayed(1,10000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -416,7 +418,7 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
             }.start();
             wordsToVoice.startSynthesizer("欢迎回家，已为你打开回家模式",mTtsListener);
         }
-        /*else if (scene(sendMsg,"我要出门")||scene(sendMsg,"准备出门")){
+        else if (scene(sendMsg,"我要出门")||scene(sendMsg,"准备出门")){
             L.i("2");
             new Thread(){
                 @Override
@@ -425,9 +427,9 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
                     try {
                         blControl.commandRedCodeDevice(BLControlConstants.MAIN_LIGHT_CLOSE, BLControlConstants.RM_PRO_DID);   //关灯
                         sleep(1000);
-                        blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_7, BLControlConstants.RM_PRO_DID);   //窗帘
+                        blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_2, BLControlConstants.RM_PRO_DID);   //窗帘
                         sleep(1000);
-                        blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_5, BLControlConstants.RM_PRO_DID);   //车库门
+                        blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_3, BLControlConstants.RM_PRO_DID);   //车库门
                         handler.sendEmptyMessageDelayed(1,10000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -444,7 +446,7 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
                     try {
                         blControl.commandRedCodeDevice(BLControlConstants.MAIN_LIGHT_CLOSE, BLControlConstants.RM_PRO_DID);
                         sleep(1000);
-                        blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_7, BLControlConstants.RM_PRO_DID);   //窗帘
+                        blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_2, BLControlConstants.RM_PRO_DID);   //窗帘
                         handler.sendEmptyMessageDelayed(1,10000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -459,7 +461,7 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
                 public void run() {
                     super.run();
                     try {
-                        blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_7, BLControlConstants.RM_PRO_DID);   //窗帘
+                        blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_2, BLControlConstants.RM_PRO_DID);   //窗帘
                         sleep(1000);
                         blControl.commandRedCodeDevice(BLControlConstants.MAIN_LIGHT_OPEN, BLControlConstants.RM_PRO_DID);
                     } catch (InterruptedException e) {
@@ -482,7 +484,7 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
             wordsToVoice.startSynthesizer(strResult,mTtsListener);
         }else if (scene(sendMsg,"热门")&&scene(sendMsg,"电视剧")){
             messageCreat(NetworkStateUtil.getLocalMacAddressFromWifiInfo(MainActivity.this)
-                    ,String.valueOf(app.getLongitude()),String.valueOf(app.getLatitude()),"device_text","我要看楚乔传","13145");
+                    ,String.valueOf(app.getLongitude()),String.valueOf(app.getLatitude()),"device_text","我要看权利的游戏","13145");
             L.i("10");
         }
 
@@ -503,33 +505,33 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
         else if (scene(sendMsg,"阳台")&&scene(sendMsg,"灯")){
             blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_1, BLControlConstants.RM_PRO_DID);   //窗帘
         }else if (scene(sendMsg,"花园")&&scene(sendMsg,"灯")){
-            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_2, BLControlConstants.RM_PRO_DID);   //窗帘
+            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_4, BLControlConstants.RM_PRO_DID);   //窗帘
         }else if (scene(sendMsg,"空调")){
             blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_4, BLControlConstants.RM_PRO_DID);   //窗帘
         }else if (scene(sendMsg,"车库")){
-            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_5, BLControlConstants.RM_PRO_DID);   //窗帘
+            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_3, BLControlConstants.RM_PRO_DID);   //窗帘
         }else if (scene(sendMsg,"一楼")&&scene(sendMsg,"灯")&&scene(sendMsg,"走廊")){
             blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_6, BLControlConstants.RM_PRO_DID);   //窗帘
         }else if (scene(sendMsg,"窗帘")){
-            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_7, BLControlConstants.RM_PRO_DID);   //窗帘
+            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_2, BLControlConstants.RM_PRO_DID);   //窗帘
         }else if (scene(sendMsg,"书房")&&scene(sendMsg,"灯")){
-            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_8, BLControlConstants.RM_PRO_DID);   //窗帘
+            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_14, BLControlConstants.RM_PRO_DID);   //窗帘
         }else if (scene(sendMsg,"一楼")&&scene(sendMsg,"灯")&&scene(sendMsg,"卫生间")){
-            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_9, BLControlConstants.RM_PRO_DID);   //窗帘
-        }else if (scene(sendMsg,"二楼")&&scene(sendMsg,"灯")&&scene(sendMsg,"走廊")){
-            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_10, BLControlConstants.RM_PRO_DID);   //窗帘
-        }else if (scene(sendMsg,"一楼")&&scene(sendMsg,"灯")&&scene(sendMsg,"卧室")){
             blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_11, BLControlConstants.RM_PRO_DID);   //窗帘
+        }else if (scene(sendMsg,"二楼")&&scene(sendMsg,"灯")&&scene(sendMsg,"走廊")){
+            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_9, BLControlConstants.RM_PRO_DID);   //窗帘
+        }else if (scene(sendMsg,"一楼")&&scene(sendMsg,"灯")&&scene(sendMsg,"卧室")){
+            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_10, BLControlConstants.RM_PRO_DID);   //窗帘
         }else if (scene(sendMsg,"灯")&&scene(sendMsg,"楼道")){
-            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_12, BLControlConstants.RM_PRO_DID);   //窗帘
+            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_9, BLControlConstants.RM_PRO_DID);   //窗帘
         }else if (scene(sendMsg,"吊灯")){
             blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_13, BLControlConstants.RM_PRO_DID);   //窗帘
         }else if (scene(sendMsg,"二楼")&&scene(sendMsg,"灯")&&scene(sendMsg,"卧室")){
-            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_14, BLControlConstants.RM_PRO_DID);   //窗帘
+            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_8, BLControlConstants.RM_PRO_DID);   //窗帘
         }else if (scene(sendMsg,"二楼")&&scene(sendMsg,"灯")&&scene(sendMsg,"卫生间")){
-            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_15, BLControlConstants.RM_PRO_DID);   //窗帘
+            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_7, BLControlConstants.RM_PRO_DID);   //窗帘
         }else if (scene(sendMsg,"灯")&&scene(sendMsg,"厨房")){
-            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_16, BLControlConstants.RM_PRO_DID);   //窗帘
+            blControl.commandRedCodeDevice(BLControlConstants.SMARTHOME_MODEL_6, BLControlConstants.RM_PRO_DID);   //窗帘
         }else if (scene(sendMsg,"电视")&&scene(sendMsg,"开")){
             blControl.commandRedCodeDevice(BLControlConstants.TV_ON_OFF, BLControlConstants.RM_PRO_DID);   //窗帘
         }else if (scene(sendMsg,"电视")&&scene(sendMsg,"关")){
@@ -538,9 +540,14 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
             blControl.commandRedCodeDevice(BLControlConstants.MAIN_LIGHT_OPEN, BLControlConstants.RM_PRO_DID);   //窗帘
         }else if (scene(sendMsg,"客厅")&&scene(sendMsg,"灯")&&scene(sendMsg,"关")){
             blControl.commandRedCodeDevice(BLControlConstants.MAIN_LIGHT_CLOSE, BLControlConstants.RM_PRO_DID);   //窗帘
-        }*/
+        }
+        else if (scene(sendMsg,"电视")&&scene(sendMsg,"yingliang")&&scene(sendMsg,"关")){
+            blControl.commandRedCodeDevice(BLControlConstants.MAIN_LIGHT_CLOSE, BLControlConstants.RM_PRO_DID);   //窗帘
+        }else if (scene(sendMsg,"客厅")&&scene(sendMsg,"灯")&&scene(sendMsg,"关")){
+            blControl.commandRedCodeDevice(BLControlConstants.MAIN_LIGHT_CLOSE, BLControlConstants.RM_PRO_DID);   //窗帘
+        }
 
-        else if (scene(sendMsg,"台灯")&&scene(sendMsg,"打开")){
+        /*else if (scene(sendMsg,"台灯")&&scene(sendMsg,"打开")){
             controlYeelight("0x0000000002fa4371",true,YEELIGHT_NULL,YEELIGHT_NULL,YEELIGHT_NULL);
         }else if (scene(sendMsg,"台灯")&&scene(sendMsg,"关")){
             controlYeelight("0x0000000002fa4371",false,YEELIGHT_NULL,YEELIGHT_NULL,YEELIGHT_NULL);
@@ -566,7 +573,7 @@ public class MainActivity extends Activity implements View.OnClickListener, IGet
             controlYeelight("0x00000000031a9262",false,YEELIGHT_NULL,97,YEELIGHT_NULL);
         }else if (scene(sendMsg,"灯带")&&scene(sendMsg,"黄色")){
             controlYeelight("0x00000000031a9262",false,YEELIGHT_NULL,54,YEELIGHT_NULL);
-        }
+        }*/
 
 
         else {
